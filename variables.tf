@@ -4,10 +4,12 @@ variable "project" {
 
 variable "notfication_channels" {
   type = map(object({
-    cell_number   = string
     channel_type  = string
     display_name  = string
-    email_address = string
     enabled       = bool
+    labels        = object({
+      cell_number   = optional(string)
+      email_address = optional(string)
+    })
   }))
 }

@@ -7,7 +7,7 @@ resource "google_monitoring_notification_channel" "channel" {
   enabled      = each.value.enabled
   type         = each.value.channel_type
   labels = {
-    number        = each.value.cell_number
-    email_address = each.value.email_address
+    number        = each.value.labels.cell_number
+    email_address = each.value.labels.email_address
   }
 }
