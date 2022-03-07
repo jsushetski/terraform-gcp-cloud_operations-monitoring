@@ -24,6 +24,6 @@ resource "google_monitoring_uptime_check_config" "uptime_checks" {
     labels = {
       host       = each.value.host
       project_id = var.project
-    ]
+    }
   }
 }
