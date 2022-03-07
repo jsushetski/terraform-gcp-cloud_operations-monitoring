@@ -34,11 +34,20 @@ variable "notification_channels" {
   }))
 }
 
+variable "uptime_check_defaults" {
+  type = object({
+    selected_regions = list(string)
+  })
+  default = {
+    selected_regions = ["USA"]
+  }
+}
+
 variable "uptime_checks" {
   type = map(object({
     host             = string
     period           = number
-    selected_regions = list(string)
+    selected_regions = optional(list(string))
     tcp_port         = optional(number)
     timeout          = number
   }))

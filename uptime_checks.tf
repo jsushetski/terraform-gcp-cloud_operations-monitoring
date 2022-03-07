@@ -5,7 +5,7 @@ resource "google_monitoring_uptime_check_config" "uptime_checks" {
 
   display_name     = each.key
   period           = "${each.value.period}s"
-  selected_regions = each.value.selected_regions
+  selected_regions = each.value.selected_regions == null ? var.uptime_check_defaults.selected_regions : each.value.selected_regions
   timeout          = "${each.value.timeout}s"
 
   #dynamic "http_check" {
