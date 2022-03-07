@@ -2,7 +2,7 @@ variable "project" {
   type = string
 }
 
-variable "notfication_channels" {
+variable "notification_channels" {
   type = map(object({
     channel_type  = string
     display_name  = string
