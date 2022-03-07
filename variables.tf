@@ -33,3 +33,13 @@ variable "notification_channels" {
     })
   }))
 }
+
+variable "uptime_checks" {
+  type = map(object({
+    host             = string
+    period           = number
+    selected_regions = list(string)
+    tcp_port         = optional(number)
+    timeout          = number
+  }))
+}
