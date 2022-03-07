@@ -1,4 +1,4 @@
-resource "google_monitoring_notification_channel" "channel" {
+resource "google_monitoring_notification_channel" "channels" {
   provider = google
 
   for_each = var.notification_channels
