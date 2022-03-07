@@ -12,7 +12,7 @@ variable "alert_policy_defaults" {
 }
 
 variable "alert_policies" {
-  type = map(object({
+  type = list(object({
     combiner     = optional(string)
     display_name = string
     threshold_conditions = list(object({
