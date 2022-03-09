@@ -8,8 +8,18 @@ resource "google_monitoring_uptime_check_config" "uptime_checks" {
   selected_regions = each.value.selected_regions == null ? var.uptime_check_defaults.selected_regions : each.value.selected_regions
   timeout          = "${each.value.timeout}s"
 
-  #dynamic "http_check" {
-  #}
+  dynamic "http_check" {
+    for_each = each.value.http_check == null ? [] : [0]
+
+    content {
+      path         = each.value.http_check.path
+      port         = each.value.http_check.port
+      use_ssl      = each.value.http_check.use_ssl
+      validate_ssl = each.value.http_check.use_ssl ? each.value.http_check.validate_ssl : null
+      mask_headers = false
+      headers      = {}
+    }
+  }
 
   dynamic "tcp_check" {
     for_each = each.value.tcp_check == null ? [] : [0]

@@ -49,6 +49,12 @@ variable "uptime_checks" {
     period           = number
     selected_regions = optional(list(string))
     timeout          = number
+    http_check       = optional(object({
+      path         = string
+      port         = number
+      use_ssl      = bool
+      validate_ssl = bool
+    }))
     tcp_check        = optional(object({
       tcp_port = optional(number)
     }))
