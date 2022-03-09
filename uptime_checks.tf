@@ -12,10 +12,10 @@ resource "google_monitoring_uptime_check_config" "uptime_checks" {
   #}
 
   dynamic "tcp_check" {
-    for_each = each.value.tcp_port == null ? [] : [0]
+    for_each = each.value.tcp_check == null ? [] : [0]
 
     content {
-      port = each.value.tcp_port
+      port = each.value.tcp_check.tcp_port
     }
   }
 

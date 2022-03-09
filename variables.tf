@@ -48,7 +48,9 @@ variable "uptime_checks" {
     host             = string
     period           = number
     selected_regions = optional(list(string))
-    tcp_port         = optional(number)
     timeout          = number
+    tcp_check        = optinal(object({
+      tcp_port = optional(number)
+    }))
   }))
 }
