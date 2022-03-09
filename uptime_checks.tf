@@ -15,7 +15,7 @@ resource "google_monitoring_uptime_check_config" "uptime_checks" {
       path         = coalesce(each.value.http_check.path, var.uptime_check_defaults.http_check.path)
       port         = coalesce(each.value.http_check.port, var.uptime_check_defaults.http_check.port)
       use_ssl      = coalesce(each.value.http_check.use_ssl == null, var.uptime_check_defaults.http_check.use_ssl)
-      validate_ssl = (coalesce(each.value.http_check.use_ssl, var.uptime_check_defaults.http_check.use_ssl) ? (coalesce(each.value.http_check.validate_ssl, var.uptime_check_defaults.http_check.validate_ssl)) : null
+      validate_ssl = (coalesce(each.value.http_check.use_ssl, var.uptime_check_defaults.http_check.use_ssl)) ? (coalesce(each.value.http_check.validate_ssl, var.uptime_check_defaults.http_check.validate_ssl)) : null
       mask_headers = false
       headers      = {}
     }
