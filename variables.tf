@@ -42,7 +42,7 @@ variable "uptime_check_defaults" {
     http_check = object({
       path         = optional(string)
       port         = optional(number)
-      use_ssl      = optinal(bool)
+      use_ssl      = optional(bool)
       validate_ssl = optional(bool)
     })
   })
