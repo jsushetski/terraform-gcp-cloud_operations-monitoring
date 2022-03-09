@@ -24,10 +24,10 @@ variable "alert_policy_defaults" {
 
 variable "notification_channels" {
   type = map(object({
-    channel_type  = string
-    display_name  = string
-    enabled       = bool
-    labels        = object({
+    channel_type = string
+    display_name = string
+    enabled      = bool
+    labels = object({
       cell_number   = optional(string)
       email_address = optional(string)
     })
@@ -53,13 +53,13 @@ variable "uptime_checks" {
     period           = optional(number)
     selected_regions = optional(list(string))
     timeout          = optional(number)
-    http_check       = optional(object({
+    http_check = optional(object({
       path         = string
       port         = number
       use_ssl      = bool
       validate_ssl = bool
     }))
-    tcp_check        = optional(object({
+    tcp_check = optional(object({
       tcp_port = optional(number)
     }))
   }))
