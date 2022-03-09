@@ -12,7 +12,7 @@ resource "google_monitoring_uptime_check_config" "uptime_checks" {
     for_each = each.value.http_check == null ? [] : [0]
 
     content { 
-      path         = each.value.http_check.path == null ? var.uptime_check_defaults.http_check.path : each.value.http_check.path
+      path         = coalesce(each.value.http_check.path, var.uptime_check_defaults.http_check.path)
       port         = each.value.http_check.port == null ? var.uptime_check_defaults.http_check.port : each.value.http_check.port
       use_ssl      = each.value.http_check.use_ssl == null ? var.uptime_check_defaults.http_check.use_ssl : each.value.http_check.use_ssl
       validate_ssl = (each.value.http_check.use_ssl == null ? var.uptime_check_defaults.http_check.use_ssl : each.value.http_check.use_ssl) ? (each.value.http_check.validate_ssl == null ? var.uptime_check_defaults.http_check.validate_ssl : each.value.http_check.validate_ssl) : null
