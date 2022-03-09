@@ -49,7 +49,7 @@ variable "uptime_checks" {
     period           = number
     selected_regions = optional(list(string))
     timeout          = number
-    tcp_check        = optinal(object({
+    tcp_check        = optional(object({
       tcp_port = optional(number)
     }))
   }))
