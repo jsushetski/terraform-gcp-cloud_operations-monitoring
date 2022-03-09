@@ -36,19 +36,23 @@ variable "notification_channels" {
 
 variable "uptime_check_defaults" {
   type = object({
+    period           = number
     selected_regions = list(string)
+    timeout          = number
   })
   default = {
+    period           = 60
     selected_regions = ["USA"]
+    timeout          = 10
   }
 }
 
 variable "uptime_checks" {
   type = map(object({
     host             = string
-    period           = number
+    period           = optional(number)
     selected_regions = optional(list(string))
-    timeout          = number
+    timeout          = optional(number)
     http_check       = optional(object({
       path         = string
       port         = number

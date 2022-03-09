@@ -4,9 +4,9 @@ resource "google_monitoring_uptime_check_config" "uptime_checks" {
   for_each = var.uptime_checks
 
   display_name     = each.key
-  period           = "${each.value.period}s"
+  period           = "${each.value.period == null ? var.uptime_check_defaults.period : each.value.period}s"
   selected_regions = each.value.selected_regions == null ? var.uptime_check_defaults.selected_regions : each.value.selected_regions
-  timeout          = "${each.value.timeout}s"
+  timeout          = "${each.value.timeout == null ? var.uptime_check_defaults.timeout : each.value.timeout}s"
 
   dynamic "http_check" {
     for_each = each.value.http_check == null ? [] : [0]
