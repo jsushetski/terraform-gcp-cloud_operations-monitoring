@@ -3,7 +3,7 @@ resource "google_monitoring_uptime_check_config" "uptime_checks" {
 
   for_each = var.uptime_checks
 
-  display_name     = each.key
+  display_name     = each.value.http_check == null ? "${var.host} TCP Check on port ${var.tcp_port}" : "${var.host} HTTP(S) Check"
   period           = "${coalesce(each.value.period, var.uptime_check_defaults.period)}s"
   selected_regions = coalesce(each.value.selected_regions, var.uptime_check_defaults.selected_regions)
   timeout          = "${coalesce(each.value.timeout, var.uptime_check_defaults.timeout)}s"
