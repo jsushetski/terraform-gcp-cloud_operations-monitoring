@@ -39,11 +39,23 @@ variable "uptime_check_defaults" {
     period           = number
     selected_regions = list(string)
     timeout          = number
+    http_check = object({
+      path         = string
+      port         = number
+      use_ssl      = bool
+      validate_ssl = bool
+    })
   })
   default = {
     period           = 60
     selected_regions = ["USA"]
     timeout          = 10
+    http_check = {
+      path         = "/"
+      port         = 443
+      use_ssl      = true
+      validate_ssl = true
+    }
   }
 }
 
