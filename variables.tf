@@ -4,23 +4,27 @@ variable "project" {
 
 variable "alert_policy_defaults" {
   type = object({
-    combiner = string
+    combiner              = string
+    notification_channels = list(string)
   })
   default = {
-    combiner = "OR"
+    combiner              = "OR"
+    notification_channels = []
   }
 }
 
-#variable "alert_policies" {
-#  type = list(object({
-#    combiner     = optional(string)
-#    display_name = string
-#    uptime_checks = list(object({
-#      display_name = string
-#    }))
-#    notification_channels = list(string)
-#  }))
-#}
+variable "alert_policies" {
+  type = list(object({
+    combiner     = optional(string)
+    display_name = string
+    uptime_checks = list(object({
+      display_name      = string
+      duration          = number
+      uptime_check_name = string
+    }))
+    notification_channels = optional(list(string))
+  }))
+}
 
 variable "notification_channels" {
   type = map(object({

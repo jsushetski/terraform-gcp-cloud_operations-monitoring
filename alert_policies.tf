@@ -1,12 +1,12 @@
-#resource "google_monitoring_alert_policy" "alert_policies" {
-#  provider = google
-#
-#  for_each = var.alert_policies
-#
-#  combiner = each.value.combiner == null ? var.alert_policy_defaults.combiner : each.value.combiner
-#
-#  display_name = each.value.display_name
-#
+resource "google_monitoring_alert_policy" "alert_policies" {
+  provider = google
+
+  for_each = var.alert_policies
+
+  combiner = coalesce(each.value.combiner, var.alert_policy_defaults.combiner)
+
+  display_name = each.value.display_name
+
 #  # threshold conditions
 #  dynamic "conditions" {
 #    for_each = each.value.threshold_conditions
@@ -35,16 +35,33 @@
 #      }
 #    }
 #  }
-#
-#  # uptime check conditions
-#  dynamic "conditions" {
-#    for_each = each.value.uptime_checks
-#    iterator = condition
-#
-#    content {
-#      display_name = condition.value.display_name
-#    }
-#  }
-#
-#  notification_channels = each.value.notification_channels
-#}
+
+  # uptime check conditions are a special form of threshold_condition
+  dynamic "conditions" {
+    for_each = each.value.uptime_checks
+    iterator = condition
+
+    content {
+      display_name = condition.display_name
+      condition_threshold {
+        comparison     = "COMPARISON_GT"
+        duration       = "${condition.duration}s"
+        filter         = "metric.type=\"monitoring.googleapis.com/uptime_check/check_passed\" resource.type=\"uptime_url\" metric.label.\"check_id\"=\"${google_monitoring_uptime_check_config.uptime_checks[condition.uptime_check_name].uptime_check_id}\""
+        theshold_value = 1
+
+        aggregations {
+          alignment_period     = 1200
+          cross_series_reducer = "REDUCE_COUNT_FALSE"
+          group_by_fields      = ["resource.*",]
+          per_series_aligner   = "ALIGN_NEXT_OLDER"
+        }
+
+        trigger {
+          count = 1
+        }
+      }
+    }
+  }
+
+  notification_channels = coalesce(each.value.notification_channels, var.alert_policy_defaults.notification_channels)
+}
