@@ -40,10 +40,10 @@ variable "uptime_check_defaults" {
     selected_regions = list(string)
     timeout          = number
     http_check = object({
-      path         = optional(string)
-      port         = optional(number)
-      use_ssl      = optional(bool)
-      validate_ssl = optional(bool)
+      path         = string
+      port         = number
+      use_ssl      = bool
+      validate_ssl = bool
     })
   })
   default = {
@@ -66,10 +66,10 @@ variable "uptime_checks" {
     selected_regions = optional(list(string))
     timeout          = optional(number)
     http_check = optional(object({
-      path         = string
-      port         = number
-      use_ssl      = bool
-      validate_ssl = bool
+      path         = optional(string)
+      port         = optional(number)
+      use_ssl      = optional(bool)
+      validate_ssl = optional(bool)
     }))
     tcp_check = optional(object({
       tcp_port = optional(number)
