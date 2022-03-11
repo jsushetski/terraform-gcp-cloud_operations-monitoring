@@ -16,7 +16,7 @@ variable "alert_policy_defaults" {
 variable "alert_policies" {
   type = map(object({
     combiner     = optional(string)
-    display_name = string
+    display_name = optional(string)
     uptime_checks = list(object({
       display_name      = string
       duration          = number
