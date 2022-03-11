@@ -22,9 +22,9 @@ variable "alert_policies" {
       duration          = number
       uptime_check_name = string
     })))
-    ssl_cert_expiry_checks = optional(list(object({
-      host             = string
-      expiry_threshold = number
+    ssl_expiry_checks = optional(list(object({
+      host      = string
+      days_left = number
     })))
     notification_channels = optional(list(string))
   }))
