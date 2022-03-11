@@ -42,11 +42,11 @@ resource "google_monitoring_alert_policy" "alert_policies" {
     iterator = condition
 
     content {
-      display_name = condition.display_name
+      display_name = condition.value.display_name
       condition_threshold {
         comparison      = "COMPARISON_GT"
-        duration        = "${condition.duration}s"
-        filter          = "metric.type=\"monitoring.googleapis.com/uptime_check/check_passed\" resource.type=\"uptime_url\" metric.label.\"check_id\"=\"${google_monitoring_uptime_check_config.uptime_checks[condition.uptime_check_name].uptime_check_id}\""
+        duration        = "${condition.value.duration}s"
+        filter          = "metric.type=\"monitoring.googleapis.com/uptime_check/check_passed\" resource.type=\"uptime_url\" metric.label.\"check_id\"=\"${google_monitoring_uptime_check_config.uptime_checks[condition.value.uptime_check_name].uptime_check_id}\""
         threshold_value = 1
 
         aggregations {
