@@ -38,7 +38,7 @@ resource "google_monitoring_alert_policy" "alert_policies" {
 
   # uptime check conditions are a special form of threshold_condition
   dynamic "conditions" {
-    for_each = each.value.uptime_checks
+    for_each = each.value.uptime_checks == null ? [] : each.value.uptime_checks
     iterator = uptime_check
 
     content {
@@ -65,7 +65,7 @@ resource "google_monitoring_alert_policy" "alert_policies" {
 
   # SSL certificate expiry conditions are a special form of threshold condition
   dynamic "conditions" {
-    for_each = each.value.ssl_expiry_checks
+    for_each = each.value.uptime_checks.ssl_expiry_checks
     iterator = check
 
     content {
