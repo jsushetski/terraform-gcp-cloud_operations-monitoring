@@ -39,14 +39,14 @@ resource "google_monitoring_alert_policy" "alert_policies" {
   # uptime check conditions are a special form of threshold_condition
   dynamic "conditions" {
     for_each = each.value.uptime_checks
-    iterator = condition
+    iterator = uptime_check
 
     content {
-      display_name = condition.value.display_name
+      display_name = uptime_check.value.display_name
       condition_threshold {
         comparison      = "COMPARISON_GT"
-        duration        = "${condition.value.duration}s"
-        filter          = "metric.type=\"monitoring.googleapis.com/uptime_check/check_passed\" resource.type=\"uptime_url\" metric.label.\"check_id\"=\"${google_monitoring_uptime_check_config.uptime_checks[condition.value.uptime_check_name].uptime_check_id}\""
+        duration        = "${uptime_check.value.duration}s"
+        filter          = "metric.type=\"monitoring.googleapis.com/uptime_check/check_passed\" resource.type=\"uptime_url\" metric.label.\"check_id\"=\"${google_monitoring_uptime_check_config.uptime_checks[uptime_check.value.uptime_check_name].uptime_check_id}\""
         threshold_value = 1
 
         aggregations {
@@ -54,6 +54,33 @@ resource "google_monitoring_alert_policy" "alert_policies" {
           cross_series_reducer = "REDUCE_COUNT_FALSE"
           group_by_fields      = ["resource.*",]
           per_series_aligner   = "ALIGN_NEXT_OLDER"
+        }
+
+        trigger {
+          count = 1
+        }
+      }
+    }
+  }
+
+  # SSL certificate expiry conditions are a special form of threshold condition
+  dynamic "conditions" {
+    for_each = each.value.ssl_cert_expiry_checks
+    iterator = expiry_check
+
+    content {
+      display_name = expiry_check.value.display_name
+      condition_threshold {
+        comparison      = "COMPARISON_LT"
+        duration        = "60s"
+        filter          = "metric.type=\"monitoring.googleapis.com/uptime_check/time_until_ssl_cert_expires\" resource.type=\"uptime_url\" resource.label.host=\"${expiry_check.value.host}\""
+        threshold_value = expiry_check.value.expiry_threshold
+
+        aggregations {
+          alignment_period     = "300s"
+          cross_series_reducer = "REDUCE_MAX"
+          group_by_fields      = []
+          per_series_aligner   = "ALIGN_MEAN"
         }
 
         trigger {

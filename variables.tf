@@ -17,11 +17,15 @@ variable "alert_policies" {
   type = map(object({
     combiner     = optional(string)
     display_name = optional(string)
-    uptime_checks = list(object({
+    uptime_checks = optional(list(object({
       display_name      = string
       duration          = number
       uptime_check_name = string
-    }))
+    })))
+    ssl_cert_expiry_checks = optional(list(object({
+      host             = string
+      expiry_threshold = number
+    })))
     notification_channels = optional(list(string))
   }))
 }
