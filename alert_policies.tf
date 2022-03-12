@@ -6,6 +6,7 @@ resource "google_monitoring_alert_policy" "alert_policies" {
   combiner = coalesce(each.value.combiner, var.alert_policy_defaults.combiner)
 
   display_name = coalesce(each.value.display_name, each.key)
+  enabled      = coalesce(each.value.enabled, var.alert_policy_defaults.enabled)
 
 #  # threshold conditions
 #  dynamic "conditions" {

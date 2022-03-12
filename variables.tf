@@ -5,10 +5,12 @@ variable "project" {
 variable "alert_policy_defaults" {
   type = object({
     combiner              = string
+    enabled               = bool
     notification_channels = list(string)
   })
   default = {
     combiner              = "OR"
+    enabled               = true
     notification_channels = []
   }
 }
@@ -17,6 +19,7 @@ variable "alert_policies" {
   type = map(object({
     combiner     = optional(string)
     display_name = optional(string)
+    enabled      = optional(bool)
     uptime_checks = optional(list(object({
       display_name      = string
       duration          = number
