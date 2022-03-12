@@ -66,16 +66,16 @@ resource "google_monitoring_alert_policy" "alert_policies" {
 
   # SSL certificate expiry conditions are a special form of threshold condition
   dynamic "conditions" {
-    for_each = each.value.ssl_expiry_checks == null ? [] : each.value.ssl_expiry_checks
-    iterator = check
+    for_each = each.value.uptime_checks == null ? [] : flatten([for check in each.value.uptime_checks : check.ssl_expiry_checks[*] if check.ssl_expiry_checks != null])
+    iterator = ssl_check
 
     content {
-      display_name = "SSL Expiry Check on ${check.value.host}"
+      display_name = "SSL Expiry Check on ${ssl_check.value.host} - ${ssl_check.value.days_left} days left"
       condition_threshold {
         comparison      = "COMPARISON_LT"
         duration        = "60s"
-        filter          = "metric.type=\"monitoring.googleapis.com/uptime_check/time_until_ssl_cert_expires\" resource.type=\"uptime_url\" resource.label.host=\"${check.value.host}\""
-        threshold_value = check.value.days_left
+        filter          = "metric.type=\"monitoring.googleapis.com/uptime_check/time_until_ssl_cert_expires\" resource.type=\"uptime_url\" resource.label.host=\"${ssl_check.value.host}\""
+        threshold_value = ssl_check.value.days_left
 
         aggregations {
           alignment_period     = "300s"
