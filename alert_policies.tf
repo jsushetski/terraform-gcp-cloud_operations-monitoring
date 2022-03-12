@@ -90,6 +90,5 @@ resource "google_monitoring_alert_policy" "alert_policies" {
     }
   }
 
-  #notification_channels = coalesce(each.value.notification_channels, var.alert_policy_defaults.notification_channels)
-  notification_channels = google_monitoring_notification_channel.channels[each.value.notification_channels[0]]
+  notification_channels = [for channel in coalesce(each.value.notification_channels, var.alert_policy_defaults.notification_channels) : google_monitoring_notification_channel.channels[channel].id]
 }
