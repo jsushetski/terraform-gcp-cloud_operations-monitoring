@@ -20,8 +20,7 @@ variable "alert_policies" {
     combiner     = optional(string)
     display_name = optional(string)
     enabled      = optional(bool)
-    uptime_checks = optional(list(object({
-      display_name      = string
+    uptime_checks = optional(map(object({
       duration          = number
       uptime_check_name = string
       ssl_expiry_checks = optional(list(object({

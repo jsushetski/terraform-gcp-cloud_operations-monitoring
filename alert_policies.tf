@@ -43,7 +43,7 @@ resource "google_monitoring_alert_policy" "alert_policies" {
     iterator = uptime_check
 
     content {
-      display_name = uptime_check.value.display_name
+      display_name = uptime_check.key
       condition_threshold {
         comparison      = "COMPARISON_GT"
         duration        = "${uptime_check.value.duration}s"
