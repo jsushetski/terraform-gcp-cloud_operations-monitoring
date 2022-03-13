@@ -24,7 +24,6 @@ variable "alert_policies" {
       duration          = number
       uptime_check_name = string
       ssl_expiry_checks = optional(list(object({
-        host      = string
         days_left = number
       })))
     })))
