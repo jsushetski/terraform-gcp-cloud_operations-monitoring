@@ -71,7 +71,7 @@ resource "google_monitoring_alert_policy" "alert_policies" {
         for uptime_check in each.value.uptime_checks :
           [
             for ssl in uptime_check.ssl_expiry_checks :
-              merge(ssl, {"uptime_check_name" = uptime_check.uptime_check_name})
+              merge(ssl, {"uptime_check_host" = google_monitoring_uptime_check_config.uptime_checks[uptime_check.uptime_check_name].monitored_resource[0].labels.host})
           ]
           if uptime_check.ssl_expiry_checks != null
       ]
@@ -79,11 +79,11 @@ resource "google_monitoring_alert_policy" "alert_policies" {
     iterator = ssl_check
 
     content {
-      display_name = "SSL Expiry Check on ${google_monitoring_uptime_check_config.uptime_checks[ssl_check.value.uptime_check_name].monitored_resource[0].labels.host} - ${ssl_check.value.days_left} days left"
+      display_name = "SSL Expiry Check on ${ssl_check.value.uptime_check_host} - ${ssl_check.value.days_left} days left"
       condition_threshold {
         comparison      = "COMPARISON_LT"
         duration        = "60s"
-        filter          = "metric.type=\"monitoring.googleapis.com/uptime_check/time_until_ssl_cert_expires\" resource.type=\"uptime_url\" resource.label.host=\"${google_monitoring_uptime_check_config.uptime_checks[ssl_check.value.uptime_check_name].monitored_resource[0].labels.host}\""
+        filter          = "metric.type=\"monitoring.googleapis.com/uptime_check/time_until_ssl_cert_expires\" resource.type=\"uptime_url\" resource.label.host=\"${ssl_check.value.uptime_check_host}\""
         threshold_value = ssl_check.value.days_left
 
         aggregations {
