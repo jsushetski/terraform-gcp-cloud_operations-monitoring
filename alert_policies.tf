@@ -66,7 +66,7 @@ resource "google_monitoring_alert_policy" "alert_policies" {
 
   # SSL certificate expiry conditions are a special form of threshold condition
   dynamic "conditions" {
-    for_each = each.value.uptime_checks == null ? {} : flatten([for check in each.value.uptime_checks : check.ssl_expiry_checks[*] if check.ssl_expiry_checks != null])
+    for_each = each.value.uptime_checks == null ? [] : flatten([for check in each.value.uptime_checks : check.ssl_expiry_checks[*] if check.ssl_expiry_checks != null])
     iterator = ssl_check
 
     content {
