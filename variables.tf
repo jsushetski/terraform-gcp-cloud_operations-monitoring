@@ -81,7 +81,7 @@ variable "uptime_checks" {
       validate_ssl = optional(bool)
     }))
     tcp_check = optional(object({
-      tcp_port = optional(number)
+      port = number
     }))
   }))
 }

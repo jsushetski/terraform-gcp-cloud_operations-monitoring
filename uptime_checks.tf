@@ -25,7 +25,7 @@ resource "google_monitoring_uptime_check_config" "uptime_checks" {
     for_each = each.value.tcp_check == null ? [] : [0]
 
     content {
-      port = each.value.tcp_check.tcp_port
+      port = each.value.tcp_check.port
     }
   }
 
