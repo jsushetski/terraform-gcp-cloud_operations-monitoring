@@ -2,24 +2,11 @@ variable "project" {
   type = string
 }
 
-variable "alert_policy_defaults" {
-  type = object({
-    combiner              = string
-    enabled               = bool
-    notification_channels = list(string)
-  })
-  default = {
-    combiner              = "OR"
-    enabled               = true
-    notification_channels = []
-  }
-}
-
 variable "alert_policies" {
   type = map(object({
-    combiner     = optional(string)
+    combiner     = optional(string, "OR")
     display_name = optional(string)
-    enabled      = optional(bool)
+    enabled      = optional(bool, true)
     uptime_checks = optional(map(object({
       duration          = number
       uptime_check_name = string
@@ -27,7 +14,7 @@ variable "alert_policies" {
         days_left = number
       })))
     })))
-    notification_channels = optional(list(string))
+    notification_channels = optional(list(string), [])
   }))
 }
 
@@ -43,42 +30,17 @@ variable "notification_channels" {
   }))
 }
 
-variable "uptime_check_defaults" {
-  type = object({
-    period           = number
-    selected_regions = list(string)
-    timeout          = number
-    http_check = object({
-      path         = string
-      port         = number
-      use_ssl      = bool
-      validate_ssl = bool
-    })
-  })
-  default = {
-    period           = 60
-    selected_regions = ["USA"]
-    timeout          = 10
-    http_check = {
-      path         = "/"
-      port         = 443
-      use_ssl      = true
-      validate_ssl = true
-    }
-  }
-}
-
 variable "uptime_checks" {
   type = map(object({
     host             = string
-    period           = optional(number)
-    selected_regions = optional(list(string))
-    timeout          = optional(number)
+    period           = optional(number, 60)
+    selected_regions = optional(list(string), ["USA"])
+    timeout          = optional(number, 10)
     http_check = optional(object({
-      path         = optional(string)
-      port         = optional(number)
-      use_ssl      = optional(bool)
-      validate_ssl = optional(bool)
+      path         = optional(string, "/")
+      port         = optional(number, 443)
+      use_ssl      = optional(bool, true)
+      validate_ssl = optional(bool, true)
     }))
     tcp_check = optional(object({
       port = number
