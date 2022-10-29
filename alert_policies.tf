@@ -3,10 +3,10 @@ resource "google_monitoring_alert_policy" "alert_policies" {
 
   for_each = var.alert_policies
 
-  combiner = coalesce(each.value.combiner, var.alert_policy_defaults.combiner)
+  combiner = each.value.combiner
 
   display_name = coalesce(each.value.display_name, each.key)
-  enabled      = coalesce(each.value.enabled, var.alert_policy_defaults.enabled)
+  enabled      = each.value.enabled
 
 #  # threshold conditions
 #  dynamic "conditions" {
@@ -100,5 +100,5 @@ resource "google_monitoring_alert_policy" "alert_policies" {
     }
   }
 
-  notification_channels = [for channel in coalesce(each.value.notification_channels, var.alert_policy_defaults.notification_channels) : google_monitoring_notification_channel.channels[channel].id]
+  notification_channels = [for channel in each.value.notification_channels : google_monitoring_notification_channel.channels[channel].id]
 }

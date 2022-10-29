@@ -2,24 +2,11 @@ variable "project" {
   type = string
 }
 
-variable "alert_policy_defaults" {
-  type = object({
-    combiner              = string
-    enabled               = bool
-    notification_channels = list(string)
-  })
-  default = {
-    combiner              = "OR"
-    enabled               = true
-    notification_channels = []
-  }
-}
-
 variable "alert_policies" {
   type = map(object({
-    combiner     = optional(string)
+    combiner     = optional(string, "OR")
     display_name = optional(string)
-    enabled      = optional(bool)
+    enabled      = optional(bool, true)
     uptime_checks = optional(map(object({
       duration          = number
       uptime_check_name = string
@@ -27,7 +14,7 @@ variable "alert_policies" {
         days_left = number
       })))
     })))
-    notification_channels = optional(list(string))
+    notification_channels = optional(list(string), [])
   }))
 }
 
